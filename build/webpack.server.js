@@ -3,13 +3,13 @@ const webpack = require('webpack');
 const baseConfig = require('./webpack.base');
 const nodeExternals = require('webpack-node-externals');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const path = require('path');
+const { VueSSRServerPlugin } = require('./lib/server.plugin');
 
 module.exports = (env = {}) => merge(baseConfig(env), {
+    target: 'node',
     entry: {
         app: './src/entry-sever.js'
     },
-    target: 'node',
     output: {
         filename: 'server-bundle.js',
         libraryTarget: 'commonjs2'
@@ -22,6 +22,7 @@ module.exports = (env = {}) => merge(baseConfig(env), {
         new webpack.optimize.LimitChunkCountPlugin({
             maxChunks: 1,
         }),
-        new WebpackManifestPlugin({ fileName: 'vue-ssr-server-manifest.json' })
+        new WebpackManifestPlugin({ fileName: 'vue-ssr-server-bundle.json' }),
+        // new VueSSRServerPlugin()
     ],
 });

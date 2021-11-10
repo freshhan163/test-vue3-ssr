@@ -5,10 +5,11 @@ const webpack = require('webpack');
 const MSF = require('memory-fs');
 const clientConfig = require('./webpack.client')();
 const serverConfig = require('./webpack.server')();
+const fs = require('fs');
 
 const readOutputFile = (fs, file) => {
     try {
-        console.log('path =', path.join(clientConfig.output.path, file));
+        // console.log('path =', path.join(clientConfig.output.path, file));
         // const data = fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8');
         // console.log('data =', data);
         // return data;
@@ -20,14 +21,14 @@ module.exports = function setupDevServer(app, cb) {
     console.log('执行 setupDevServer');
     let bundle, clientManifest, ready;
 
-    const readyPromise = new Promise((r) => {
-        // console.log('r =', r);
-        ready = r;
+    const readyPromise = new Promise((resolve) => {
+        ready = resolve;
     });
     const update = () => {
         if (bundle && clientManifest) {
-            // console.log('执行update clientManifest =', clientManifest);
             ready();
+            console.log('执行callback函数');
+            // 此处的bundle是server的bundle；clientManifest是客户端的manifest
             cb(bundle, { clientManifest });
         }
     };
@@ -40,10 +41,8 @@ module.exports = function setupDevServer(app, cb) {
     clientConfig.output.filename = '[name].js';
     // 添加HotMiddleware
     clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-    console.log('开始打包');
     // 在打包完成后，获取资源，添加devMiddleware
     const clientCompiler = webpack(clientConfig);
-    console.log('打包完成');
     const devMiddleware = require('webpack-dev-middleware')(clientCompiler, {
         publicPath: '/dist/',
         stats: {
@@ -82,11 +81,14 @@ module.exports = function setupDevServer(app, cb) {
 
     // 监听文件变更
     serverCompiler.watch({}, (err, stats) => {
+        console.log('服务端 监听文件变更');
         if (err) throw err;
         stats = stats.toJson();
         if (stats.errors.length) return;
     
-        bundle = JSON.parse(readFile(mfs, 'vue-ssr-server-bundle.json'));
+        bundle = JSON.parse(readOutputFile(msf, 'vue-ssr-server-bundle.json'));
+        console.log('服务端bundle =', Object.keys(bundle));
+        
         update();
     });
 
