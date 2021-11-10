@@ -34,7 +34,11 @@ module.exports = function setupDevServer(app, cb) {
     };
 
     // 修改clientConfig
-    clientConfig.entry.app = [
+    // clientConfig.entry.app = [
+    //     'webpack-hot-middleware/client',
+    //     clientConfig.entry.app
+    // ];
+    clientConfig.entry = [
         'webpack-hot-middleware/client',
         clientConfig.entry.app
     ];
@@ -87,7 +91,9 @@ module.exports = function setupDevServer(app, cb) {
         if (stats.errors.length) return;
     
         bundle = JSON.parse(readOutputFile(msf, 'vue-ssr-server-bundle.json'));
-        console.log('服务端bundle =', Object.keys(bundle));
+        console.log('服务端bundle =', bundle);
+
+        bundle = readOutputFile(msf, 'server-bundle.js');
         
         update();
     });

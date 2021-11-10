@@ -14,7 +14,8 @@ function ssrWithCreateSSRApp() {
     console.log('serverBundlePath =', serverBundlePath);
     const createApp = require(serverBundlePath).default;
     const ssrApp = createApp();
-    return ssrApp.app;
+    // console.log('ssrApp =', ssrApp)
+    return ssrApp;
 }
 
 // /bundle路径渲染
@@ -31,8 +32,11 @@ function createRenderer(bundle, options) {
 
 readyPromise = require('../build/setup-dev-server.js')(server, (bundle, options) => {
     console.log('readyPromise内部执行 options = ', options);
+    // renderer = createRenderer(bundle, options);
+    // renderer = createRenderer(bundle.files['server-bundle.js'], options);
+    
+    console.log('bundle =', bundle);
     renderer = createRenderer(bundle, options);
-    console.log('readyPromise内部执行 renderer = ', renderer);
 });
 
 function ssrWithCreateSSRAppDev() {
@@ -101,11 +105,11 @@ server.get('/ssr', async (req: any, res: any) => {
 });
 
 server.get('/bundle', async (req: any, res: any) => {
-    console.log('路径 /bundle 用createBundleRender渲染');
+    console.log('*****************路径 /bundle 用createBundleRender渲染*******************');
     // 加载bundle，获取renderer
     // const { readyPromise, renderer } = ssrWithBundleRenderer();
     await readyPromise;
-    console.log('after readyPromise renderer =', renderer);
+    // console.log('after readyPromise renderer =', renderer);
 
     // const {renderer, readyPromise } = ssrWithCreateSSRAppDev();
     // await readyPromise;
@@ -113,7 +117,7 @@ server.get('/bundle', async (req: any, res: any) => {
     const context = {
         url: req.url,
     };
-    console.log('context =', context);
+    // console.log('context =', context);
 
     let page;
     try {
