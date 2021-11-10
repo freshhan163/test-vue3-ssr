@@ -1,18 +1,95 @@
 <template>
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+    <div v-for="item in list" :ref="setItemRef" :key="item.id">
+        <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onBeforeUpdate, onUpdated } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 
-export default defineComponent({
+export default {
     name: 'App',
+    data() {
+        return {
+            list: [
+                {
+                    msg: '测试111',
+                    id: 1
+                },
+                {
+                    msg: '测试222',
+                    id: 2
+                },
+                {
+                    msg: '测试333',
+                    id: 3
+                },
+            ]
+        };
+    },
     components: {
         HelloWorld
+    },
+    setup() {
+        let itemRefs: any[] = [];
+        const setItemRef = (el: Element) => {
+            if (el) {
+                itemRefs.push(el);
+            }
+        };
+
+        onBeforeUpdate(() => {
+            itemRefs = [];
+        });
+
+        onUpdated(() => {
+            console.log('itemRefs = ', itemRefs);
+        });
+        return {
+            setItemRef
+        }
     }
-})
+}
+// export default defineComponent({
+//     name: 'App',
+//     data: function() {
+//         return {
+//             list: [
+//                 {
+//                     msg: '测试111',
+//                     id: 1
+//                 },
+//                 {
+//                     msg: '测试222',
+//                     id: 2
+//                 },
+//                 {
+//                     msg: '测试333',
+//                     id: 3
+//                 },
+//             ],
+//             itemRefs: [],
+//         };
+//     },
+//     components: {
+//         HelloWorld
+//     },
+//     beforeUpdate() {
+//         this.itemRefs = [];
+//     },
+//     updated() {
+//         console.log('this.refs = ', this.itemRefs);
+//     },
+//     methods: {
+//         setItemRef(el: any) {
+//             if (el) {
+//                 this.itemRefs.push(el);
+//             }
+//         }
+//     }
+// })
 </script>
 
 <style>
