@@ -5,40 +5,29 @@ const webpack = require('webpack');
 const MSF = require('memory-fs');
 const clientConfig = require('./webpack.client')();
 const serverConfig = require('./webpack.server')();
-const fs = require('fs');
 
 const readOutputFile = (fs, file) => {
     try {
-        // console.log('path =', path.join(clientConfig.output.path, file));
-        // const data = fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8');
-        // console.log('data =', data);
-        // return data;
         return fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8');
     } catch (e) {}
 };
 
 module.exports = function setupDevServer(app, cb) {
-    console.log('执行 setupDevServer');
-    let bundle, clientManifest, ready;
+    let serverBundle, clientManifest, ready;
 
     const readyPromise = new Promise((resolve) => {
         ready = resolve;
     });
     const update = () => {
-        if (bundle && clientManifest) {
+        if (serverBundle && clientManifest) {
             ready();
-            console.log('执行callback函数');
-            // 此处的bundle是server的bundle；clientManifest是客户端的manifest
-            cb(bundle, { clientManifest });
+            // 此处的serverBundle是server的bundle；clientManifest是客户端的manifest
+            cb(serverBundle, { clientManifest });
         }
     };
 
     // 修改clientConfig
-    // clientConfig.entry.app = [
-    //     'webpack-hot-middleware/client',
-    //     clientConfig.entry.app
-    // ];
-    clientConfig.entry = [
+    clientConfig.entry.app = [
         'webpack-hot-middleware/client',
         clientConfig.entry.app
     ];
@@ -65,10 +54,10 @@ module.exports = function setupDevServer(app, cb) {
         stats.warnings.forEach((err) => console.warn(err));
         if (stats.errors.length) return;
 
+        // 从内存中读取clientManifest文件
         clientManifest = JSON.parse(
             readOutputFile(devMiddleware.context.outputFileSystem, 'vue-ssr-client-manifest.json')
         );
-        // console.log('clientManifest =', clientManifest);
         update();
     });
     
@@ -85,15 +74,15 @@ module.exports = function setupDevServer(app, cb) {
 
     // 监听文件变更
     serverCompiler.watch({}, (err, stats) => {
-        console.log('服务端 监听文件变更');
         if (err) throw err;
         stats = stats.toJson();
         if (stats.errors.length) return;
     
-        bundle = JSON.parse(readOutputFile(msf, 'vue-ssr-server-bundle.json'));
-        console.log('服务端bundle =', bundle);
+        // 从内存读取文件夹
+        serverBundle = JSON.parse(readOutputFile(msf, 'vue-ssr-server-bundle.json'));
 
-        bundle = readOutputFile(msf, 'server-bundle.js');
+        // 在webpack.server.js中，使用官方webpack-manifest-plugin时，需要将bundle的内容读取出来，否则就要用lib自定义的server.plugin.js
+        serverBundle = readOutputFile(msf, 'server-bundle.js');
         
         update();
     });

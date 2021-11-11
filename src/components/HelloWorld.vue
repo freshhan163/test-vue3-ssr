@@ -52,6 +52,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+p {
+  color: pink;
+}
 a {
   color: #42b983;
 }

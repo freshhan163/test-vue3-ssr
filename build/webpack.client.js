@@ -1,3 +1,5 @@
+'use strict'
+
 const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.base');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');

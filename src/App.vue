@@ -1,7 +1,7 @@
 <template>
     <img alt="Vue logo" src="./assets/logo.png" />
     <div v-for="item in list" :ref="setItemRef" :key="item.id">
-        <h1>韩晓芳111222333444555666777</h1>
+        <h1>韩晓芳测试项目</h1>
         <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
     </div>
 </template>

@@ -1,3 +1,5 @@
+'use strict'
+
 const  { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const baseConfig = require('./webpack.base');
@@ -15,7 +17,6 @@ module.exports = (env = {}) => merge(baseConfig(env), {
         libraryTarget: 'commonjs2'
     },
     externals: nodeExternals({
-        // do not externalize CSS files in case we need to import it from a dep
         allowlist: /\.css$/,
     }),
     plugins: [
@@ -23,6 +24,6 @@ module.exports = (env = {}) => merge(baseConfig(env), {
             maxChunks: 1,
         }),
         new WebpackManifestPlugin({ fileName: 'vue-ssr-server-bundle.json' }),
-        // new VueSSRServerPlugin()
+        // new VueSSRServerPlugin() // 不用自定义的server plugin了，如果想用自定义的，需要修改 setup-dev-server.js的 bundle参数
     ],
 });
