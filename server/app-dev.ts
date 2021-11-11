@@ -14,7 +14,7 @@ function createRenderer(bundle, options) {
         runInNewContext: false,
         renderToString,      // 一定要加
         basedir: path.resolve(__dirname, '../dist'),
-        publicPath: '/',
+        publicPath: '/dist/', // 静态资源加载时的公共目录
         bundleRunner: require('bundle-runner') // 一定要加
     }));
 }
@@ -53,6 +53,7 @@ server.get('*', async (req: any, res: any) => {
         console.error(err);
         return;
     }
+    // console.log('page = ', page);
     // page包含：html、renderResourceHints、renderStyles、renderScripts
     const { html, renderResourceHints, renderStyles, renderScripts } = page;
 
