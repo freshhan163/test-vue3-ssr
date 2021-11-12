@@ -1,5 +1,5 @@
 /**
- * @file api.js
+ * @file util.ts
  * @desc 工具函数
  */
 import {

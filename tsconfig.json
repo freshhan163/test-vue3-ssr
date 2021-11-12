@@ -4,12 +4,12 @@
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
-        "strict": true,
         "jsx": "preserve",
         "allowJs": true,
         "sourceMap": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
+        "noImplicitAny": false,
         "lib": [
             "esnext",
             "dom"
@@ -23,6 +23,8 @@
         "src/**/*.js",
         "src/**/*.d.ts",
         "src/**/*.tsx",
-        "src/**/*.vue"
-    ]
+        "src/**/*.vue",
+        "types/**/*.d.ts"
+    ],
+    "exclude": ["node_modules"]
 }

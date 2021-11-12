@@ -13,6 +13,7 @@ module.exports = (env = {}) => ({
         filename: env.prod ? '[name].[hash].js' : '[name].js'
     },
     resolve: {
+        extensions: ['.vue', '.ts', '.js', '.jsx', '.json', '.wasm'],
         alias: {
             '@': path.resolve(__dirname, '../src'),
             vue: 'vue/dist/vue.runtime.esm-bundler.js'

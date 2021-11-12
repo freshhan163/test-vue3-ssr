@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const { renderToString } = require('vue/server-renderer');
 const { createBundleRenderer } = require('vue-bundle-renderer');
+const favicon = require('serve-favicon');
 
 const server = new express();
 
@@ -35,6 +36,7 @@ function staticRender() {
     }));
 }
 
+server.use(favicon('./public/favicon.ico'));
 staticRender();
 
 const createScriptStore = function (store) {
@@ -44,7 +46,6 @@ const createScriptStore = function (store) {
 
 server.get('*', async (req: any, res: any) => {
     await readyPromise;
-
     const context = {
         url: req.url,
     };
@@ -82,7 +83,6 @@ server.get('*', async (req: any, res: any) => {
                 </body>
             </html>
         `;
-
     // 渲染结果写入html
     fs.writeFile('rendered-dev-ssr.html', fileHtml, (err: any) => {
         if (err) {

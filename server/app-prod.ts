@@ -4,6 +4,7 @@ const fs = require('fs');
 const { renderToString } = require('vue/server-renderer');
 const { createBundleRenderer } = require('vue-bundle-renderer');
 const serverManifest = require("../dist/vue-ssr-server-bundle.json");
+const favicon = require('serve-favicon');
 
 const server = new express();
 
@@ -53,6 +54,7 @@ function staticRender() {
     }));
 }
 
+server.use(favicon('./public/favicon.ico'));
 staticRender();
 
 // 采用BundleRender渲染

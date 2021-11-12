@@ -1,5 +1,5 @@
 /**
- * @file api.js
+ * @file api.ts
  * @desc 数据mock
  */
 import {
@@ -69,10 +69,8 @@ export function fetchItems(feed, page, isServer = false) {
 
     // watcher
     if (isArray(feed) && isArray(page)) {
-        ;
-        [f, p] = feed
-        ;
-        [fOld, pOld] = page
+        const [f, p] = feed;
+        const [fOld, pOld] = page;
 
         pages = f !== fOld ? [p, p + 1] : p > pOld ? [p + 1] : [p - 1]
         // serverPrefetch, mounted：服务端预取

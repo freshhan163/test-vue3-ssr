@@ -1,4 +1,4 @@
-import _createApp from './entry.js';
+import _createApp from './entry';
 
 export default async function(context) {
     const { app, router, store } = _createApp();

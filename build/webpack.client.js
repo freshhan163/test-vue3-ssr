@@ -7,7 +7,7 @@ const { VueSSRClientPlugin } = require('./lib/client.plugin');
 
 module.exports = (env = {}) => merge(baseConfig(env), {
     entry: {
-        app: './src/entry-client.js'
+        app: './src/entry-client'
     },
     output: {
         publicPath: '/dist/'

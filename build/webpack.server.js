@@ -10,7 +10,7 @@ const { VueSSRServerPlugin } = require('./lib/server.plugin');
 module.exports = (env = {}) => merge(baseConfig(env), {
     target: 'node',
     entry: {
-        app: './src/entry-sever.js'
+        app: './src/entry-sever'
     },
     output: {
         filename: 'server-bundle.js',

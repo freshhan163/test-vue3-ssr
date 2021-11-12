@@ -22,15 +22,11 @@ const routes = [
         component: () =>
             import( /* webpackChunkName: "feeds" */ '@/pages/FeedList.vue'),
 
-        props: (route) => {
-            const maxPage = validFeeds[route.params.feed] ? validFeeds[route.params.feed]['pages'] : 1;
-            console.log('maxPage =', maxPage, route.params);
-            return {
-                feed: route.params.feed,
-                page: Number(route.params.page) || 1,
-                maxPage
-            };
-        }
+        props: (route) => ({
+            feed: route.params.feed,
+            page: Number(route.params.page) || 1,
+            maxPage: validFeeds[route.params.feed]['pages']
+        })
     },
     {
         path: '/user/:id?',
