@@ -123,12 +123,12 @@ const getters = {
     },
 }
 
-const store = createStore({
-    state,
-    mutations,
-    actions,
-    getters
-});
+// const store = createStore({
+//     state,
+//     mutations,
+//     actions,
+//     getters
+// });
 
 // if ((module as any).hot) {
 //     (module as any).hot.accept([actions, mutations], () => {

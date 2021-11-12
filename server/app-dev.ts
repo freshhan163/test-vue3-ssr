@@ -5,6 +5,7 @@ const fs = require('fs');
 const { renderToString } = require('vue/server-renderer');
 const { createBundleRenderer } = require('vue-bundle-renderer');
 const favicon = require('serve-favicon');
+const serialize = require('serialize-javascript');
 
 const server = new express();
 
@@ -39,10 +40,24 @@ function staticRender() {
 server.use(favicon('./public/favicon.ico'));
 staticRender();
 
-const createScriptStore = function (store) {
-    const scriptString = `<script id = "init-script">window.__INITIAL_STATE__ = ${JSON.stringify(store)}</script>`;
-    return scriptString;
-};
+const renderState = (context) => {
+    const contextKey = 'state';
+    const windowKey = '__INITIAL_STATE__';
+    const state = serialize(context[contextKey]);
+    const autoRemove =
+      ';(function(){var s;(s=document.currentScript||document.scripts[document.scripts.length-1]).parentNode.removeChild(s);}());';
+    var nonceAttr = context.nonce ? ' nonce="' + context.nonce + '"' : '';
+    return context[contextKey]
+      ? '<script' +
+          nonceAttr +
+          '>window.' +
+          windowKey +
+          '=' +
+          state +
+          autoRemove +
+          '</script>'
+      : '';
+  };
 
 server.get('*', async (req: any, res: any) => {
     await readyPromise;
@@ -59,10 +74,6 @@ server.get('*', async (req: any, res: any) => {
         console.error(err);
         return;
     }
-
-    // const storeString = createScriptStore(context.state);
-
-    // console.log('page = ', page);
     // page包含：html、renderResourceHints、renderStyles、renderScripts
     const { html, renderResourceHints, renderStyles, renderScripts } = page;
 
@@ -78,6 +89,7 @@ server.get('*', async (req: any, res: any) => {
                 </head>
                 <body>
                 <div id="app">${html}</div>
+                ${renderState(context)}
                 ${renderScripts()}
                 ${renderResourceHints()}
                 </body>

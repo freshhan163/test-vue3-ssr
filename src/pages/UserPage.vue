@@ -1,7 +1,7 @@
 <template>
     <div class="user-view">
         <template v-if="user">
-            <h1>User : {{ user.id }}</h1>
+            <h1>用户ID: {{ user.id }}</h1>
             <ul class="meta">
                 <li><span class="label">Created:</span> {{ user.created }}</li>
                 <li><span class="label">Karma:</span> {{ user.karma }}</li>
@@ -34,12 +34,11 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
-const store = useStore();
-const route = useRoute();
-
 export default {
     name: "UserPage",
     setup() {
+        const store = useStore();
+        const route = useRoute();
         store.dispatch("FETCH_USER", { id: route.params.id });
         const user = computed(() => store.state.users[route.params.id]);
         return {
@@ -49,7 +48,7 @@ export default {
     serverPrefetch() {
         const { id } = this.$route.params;
         return this.$store.dispatch("FETCH_USER", { id });
-    },
+    }
 };
 
 // store.dispatch("FETCH_USER", { id: route.params.id });

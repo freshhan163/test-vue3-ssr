@@ -43,13 +43,13 @@ import { computed, defineExpose, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 
-const store = useStore()
-const route = useRoute()
 
 export default {
   name: 'ItemView',
   components: { Comment, Spinner },
   setup() {
+    const store = useStore()
+    const route = useRoute()
     const item = computed(() => store.state.items[route.params.id]);
     const isAbsolute = (url) => /^https?:\/\//.test(url);
     onMounted(() => store.dispatch('FETCH_ITEM', { id: route.params.id }))

@@ -5,6 +5,7 @@ const { renderToString } = require('vue/server-renderer');
 const { createBundleRenderer } = require('vue-bundle-renderer');
 const serverManifest = require("../dist/vue-ssr-server-bundle.json");
 const favicon = require('serve-favicon');
+const serialize = require('serialize-javascript');
 
 const server = new express();
 
@@ -41,6 +42,24 @@ function ssrWithBundleRender() {
     renderer = createRenderer(serverBundle, { clientManifest });
 }
 
+function renderState(context) {
+    const contextKey = 'state';
+    const windowKey = '__INITIAL_STATE__';
+    const state = serialize(context[contextKey]);
+    const autoRemove =
+      ';(function(){var s;(s=document.currentScript||document.scripts[document.scripts.length-1]).parentNode.removeChild(s);}());';
+    var nonceAttr = context.nonce ? ' nonce="' + context.nonce + '"' : '';
+    return context[contextKey]
+      ? '<script' +
+          nonceAttr +
+          '>window.' +
+          windowKey +
+          '=' +
+          state +
+          autoRemove +
+          '</script>'
+      : '';
+  };
 
 function staticRender() {
     server.use("/img", express.static(path.join(__dirname, "../dist", "img")));
@@ -58,7 +77,7 @@ server.use(favicon('./public/favicon.ico'));
 staticRender();
 
 // 采用BundleRender渲染
-server.get('/bundle', async (req: any, res: any) => {
+server.get('*', async (req: any, res: any) => {
     ssrWithBundleRender();
     const context = {
         url: req.url,
@@ -91,6 +110,7 @@ server.get('/bundle', async (req: any, res: any) => {
                 <div id="app">${html}</div>
                 ${renderScripts()}
                 ${renderResourceHints()}
+                ${renderState(context)}
                 </body>
             </html>
         `;
@@ -107,36 +127,36 @@ server.get('/bundle', async (req: any, res: any) => {
     res.send(fileHtml);
 });
 
-server.get('*', async (req: any, res: any) => {
-    // createSSRApp模式
-    const app = ssrWithCreateSSRApp();
-    const page = await renderToString(app); // 此处的renderToString用的是vue/server-renderer
+// server.get('*', async (req: any, res: any) => {
+//     // createSSRApp模式
+//     const app = ssrWithCreateSSRApp();
+//     const page = await renderToString(app); // 此处的renderToString用的是vue/server-renderer
 
-    const fileHtml = `
-        <!DOCTYPE html>
-            <html lang="en">
-                <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>SSR Vue 3生产环境</title>
-                </head>
-                <body>
-                <div id="app">${page}</div>
-                </body>
-            </html>
-        `;
+//     const fileHtml = `
+//         <!DOCTYPE html>
+//             <html lang="en">
+//                 <head>
+//                 <meta charset="UTF-8">
+//                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//                 <title>SSR Vue 3生产环境</title>
+//                 </head>
+//                 <body>
+//                 <div id="app">${page}</div>
+//                 </body>
+//             </html>
+//         `;
 
-    // 渲染结果写入html
-    fs.writeFile('rendered-prod-ssr.html', fileHtml, (err: any) => {
-        if (err) {
-            throw err;
-        }
-    });
+//     // 渲染结果写入html
+//     fs.writeFile('rendered-prod-ssr.html', fileHtml, (err: any) => {
+//         if (err) {
+//             throw err;
+//         }
+//     });
 
-    // 返回html
-    res.setHeader('Content-Type', 'text/html');
-    res.send(fileHtml);
-});
+//     // 返回html
+//     res.setHeader('Content-Type', 'text/html');
+//     res.send(fileHtml);
+// });
 
 const port = 3001;
 server.listen(port, () => {

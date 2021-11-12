@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = (env = {}) => ({
+    cache: false,
     mode: env.prod ? 'production' : 'development',
     output: {
         path: path.resolve(__dirname, '../dist/'),
@@ -13,7 +14,7 @@ module.exports = (env = {}) => ({
         filename: env.prod ? '[name].[hash].js' : '[name].js'
     },
     resolve: {
-        extensions: ['.vue', '.ts', '.js', '.jsx', '.json', '.wasm'],
+        extensions: ['.vue', '.ts', '.js', '.jsx', '.scss', '.css', '.json', '.wasm'],
         alias: {
             '@': path.resolve(__dirname, '../src'),
             vue: 'vue/dist/vue.runtime.esm-bundler.js'
@@ -37,6 +38,9 @@ module.exports = (env = {}) => ({
                 use: [
                     {
                         loader: require.resolve('vue-loader'),
+                        options: {
+                            cache: false
+                        }
                     },
                 ],
             },
