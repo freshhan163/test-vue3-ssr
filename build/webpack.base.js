@@ -14,6 +14,7 @@ module.exports = (env = {}) => ({
     },
     resolve: {
         alias: {
+            '@': path.resolve(__dirname, '../src'),
             vue: 'vue/dist/vue.runtime.esm-bundler.js'
         }
     },
@@ -52,16 +53,18 @@ module.exports = (env = {}) => ({
                 exclude: /node_modules/,
             },
             {
-                test: /\.css$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: { importLoaders: 1 }
+                  {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        publicPath: './dist',
                     },
-                    "postcss-loader",
+                  },
+                  'css-loader',
+                  'postcss-loader',
+                  'sass-loader',
                 ],
-                exclude: /node_modules/
             },
             {
                 test: /\.(?:ico|gif|png|jpg|jpeg|webp|svg)$/i,

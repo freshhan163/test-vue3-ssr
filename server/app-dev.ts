@@ -27,7 +27,7 @@ function staticRender() {
     server.use("/img", express.static(path.join(__dirname, "../dist", "img")));
     server.use("/js", express.static(path.join(__dirname, "../dist", "js")));
     server.use("/css", express.static(path.join(__dirname, "../dist", "css")));
-    server.use("/favicon.ico", express.static(path.join(__dirname, "../dist", "favicon.ico")));
+    // server.use("/favicon.ico", express.static(path.join(__dirname, "../dist", "favicon.ico")));
     
     // 静态文件处理
     server.use('/dist', express.static(path.resolve(__dirname, '../dist'), {
@@ -36,6 +36,11 @@ function staticRender() {
 }
 
 staticRender();
+
+const createScriptStore = function (store) {
+    const scriptString = `<script id = "init-script">window.__INITIAL_STATE__ = ${JSON.stringify(store)}</script>`;
+    return scriptString;
+};
 
 server.get('*', async (req: any, res: any) => {
     await readyPromise;
@@ -53,6 +58,9 @@ server.get('*', async (req: any, res: any) => {
         console.error(err);
         return;
     }
+
+    // const storeString = createScriptStore(context.state);
+
     // console.log('page = ', page);
     // page包含：html、renderResourceHints、renderStyles、renderScripts
     const { html, renderResourceHints, renderStyles, renderScripts } = page;

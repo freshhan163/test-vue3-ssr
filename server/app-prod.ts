@@ -45,7 +45,7 @@ function staticRender() {
     server.use("/img", express.static(path.join(__dirname, "../dist", "img")));
     server.use("/js", express.static(path.join(__dirname, "../dist", "js")));
     server.use("/css", express.static(path.join(__dirname, "../dist", "css")));
-    server.use("/favicon.ico", express.static(path.join(__dirname, "../dist", "favicon.ico")));
+    // server.use("/favicon.ico", express.static(path.join(__dirname, "../dist", "favicon.ico")));
     
     // 静态文件处理
     server.use('/dist', express.static(path.resolve(__dirname, '../dist'), {

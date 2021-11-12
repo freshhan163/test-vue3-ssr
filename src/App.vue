@@ -1,105 +1,171 @@
 <template>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <div v-for="item in list" :ref="setItemRef" :key="item.id">
-        <h1>韩晓芳测试项目111</h1>
-        <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-    </div>
+    <header class="header">
+      <nav class="inner" role="navigation">
+        <router-link to="/" class="logo" exact>
+            <span>首页</span>
+        </router-link>
+        <router-link
+            v-for="(list, key) in feeds"
+            :key="key"
+            :to="{ name: 'feed-page', params: { feed: key } }"
+        >
+            {{ list.title }}
+        </router-link>
+          <a
+              class="github"
+              href="https://github.com/vuejs/vue-next"
+              target="_blank"
+              rel="noopener banner"
+          >
+              vue-next库源码
+          </a>
+      </nav>
+    </header>
+    <router-view v-slot="{ Component, route }">
+        <transition name="fade" mode="out-in">
+            <component :is="Component" :key="route.params.feed" />
+        </transition>
+    </router-view>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUpdate, onUpdated } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { validFeeds } from '@/common/api.js';
 
 export default {
-    name: 'App',
-    data() {
-        return {
-            list: [
-                {
-                    msg: '测试111',
-                    id: 1
-                },
-                {
-                    msg: '测试222',
-                    id: 2
-                },
-                {
-                    msg: '测试333',
-                    id: 3
-                },
-            ]
-        };
-    },
-    components: {
-        HelloWorld
-    },
+    name: "App",
     setup() {
-        let itemRefs: any[] = [];
-        const setItemRef = (el: Element) => {
-            if (el) {
-                itemRefs.push(el);
-            }
-        };
-
-        onBeforeUpdate(() => {
-            itemRefs = [];
-        });
-
-        onUpdated(() => {
-            console.log('itemRefs = ', itemRefs);
-        });
         return {
-            setItemRef
-        }
-    }
-}
-// export default defineComponent({
-//     name: 'App',
-//     data: function() {
-//         return {
-//             list: [
-//                 {
-//                     msg: '测试111',
-//                     id: 1
-//                 },
-//                 {
-//                     msg: '测试222',
-//                     id: 2
-//                 },
-//                 {
-//                     msg: '测试333',
-//                     id: 3
-//                 },
-//             ],
-//             itemRefs: [],
-//         };
-//     },
-//     components: {
-//         HelloWorld
-//     },
-//     beforeUpdate() {
-//         this.itemRefs = [];
-//     },
-//     updated() {
-//         console.log('this.refs = ', this.itemRefs);
-//     },
-//     methods: {
-//         setItemRef(el: any) {
-//             if (el) {
-//                 this.itemRefs.push(el);
-//             }
-//         }
-//     }
-// })
+            feeds: validFeeds
+        };
+    },
+};
 </script>
 
-<style>
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+<style lang="scss">
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  background-color: #f2f3f5;
+  margin: 0;
+  padding-top: 55px;
+  color: #2e495e;
+  overflow-y: scroll;
+}
+
+a {
+  color: #2e495e;
+  text-decoration: none;
+}
+
+.header {
+  background-color: #3eaf7c;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  height: 55px;
+
+  .inner {
+    max-width: 800px;
+    box-sizing: border-box;
+    margin: 0px auto;
+    padding: 15px 5px;
+  }
+
+  a {
+    color: #fff;
+    line-height: 24px;
+    transition: color 0.15s ease;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 300;
+    letter-spacing: 0.075em;
+    margin-right: 1.8em;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &.router-link-active {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    &:nth-child(6) {
+      margin-right: 0;
+    }
+  }
+
+  .github {
+    color: #fff;
+    font-size: 0.9em;
+    margin: 0;
+    float: right;
+  }
+}
+
+.view {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.logo {
+  position: relative;
+  height: 24px;
+  padding: 2px;
+  background-color: #fff;
+  margin-right: 10px;
+  vertical-align: middle;
+
+  span {
+    display: inline-block;
+    margin: 0 2px;
+    font-weight: 600;
+    width: 100%;
     text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+    color: #fff;
+    background-color: #3eaf7c;
+  }
+}
+
+.view {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+@media (max-width: 860px) {
+  .header .inner {
+    padding: 15px 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    .inner {
+      padding: 15px;
+    }
+
+    a {
+      margin-right: 1em;
+    }
+
+    .github {
+      display: none;
+    }
+  }
 }
 </style>
