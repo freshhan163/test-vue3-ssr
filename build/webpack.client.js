@@ -26,14 +26,6 @@ module.exports = (env = {}) => merge(baseConfig(env), {
     plugins: [
         // new WebpackManifestPlugin({
         //     fileName: 'vue-ssr-client-manifest.json',
-            // generate: (seed, files, entries) => {
-            //     console.log('generate file = ', files, 'entries =', entries);
-            //     return files.reduce((manifest, file) => {
-            //         console.log('manifest = ', manifest);
-            //         console.log('file = ', file);
-            //         return Object.assign(manifest, { [file.name]: file.path, test: 'hxf' });
-            //     }, seed);
-            // }
         // }),
         new VueSSRClientPlugin({ fileName: 'vue-ssr-client-manifest.json' })
     ]

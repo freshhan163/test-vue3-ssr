@@ -8,7 +8,7 @@
     ],
     "watch": ["server/**/*"],
     "verbose": true,
-    "exec": "ts-node --project server/tsconfig.json --files server/app-dev.ts",
+    "exec": "ts-node --project server/tsconfig.json --files server/app.ts",
     "env": {
         "PORT": "3001"
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="news-list-nav">
     <router-link v-if="page > 1" :to="`/${feed}/${page - 1}`">
-      &lt; prev
+      &lt; 上一页
     </router-link>
     <a v-else class="disabled">&lt; 上一页</a>
     <span>{{ page }}/{{ maxPage }}</span>

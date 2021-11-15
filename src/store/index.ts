@@ -123,21 +123,22 @@ const getters = {
     },
 }
 
-// const store = createStore({
-//     state,
-//     mutations,
-//     actions,
-//     getters
-// });
+// 实现store热更新
+const store = createStore({
+    state,
+    mutations,
+    actions,
+    getters
+});
 
-// if ((module as any).hot) {
-//     (module as any).hot.accept([actions, mutations], () => {
-//         (store as any).hotUpdate({
-//             actions,
-//             mutations,
-//         })
-//     })
-// }
+if ((module as any).hot) {
+    (module as any).hot.accept([actions, mutations], () => {
+        (store as any).hotUpdate({
+            actions,
+            mutations,
+        })
+    })
+}
 
 export function _createStore() {
     return createStore({

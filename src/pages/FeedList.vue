@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { computed } from 'vue';
 import ItemListNav from '@/components/ItemListNav.vue';
 import ItemList from '@/components/ItemList.vue';
 

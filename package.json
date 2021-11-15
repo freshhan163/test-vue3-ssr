@@ -2,9 +2,9 @@
     "name": "test-vue3-ssr",
     "version": "0.0.0",
     "scripts": {
-        "server": "nodemon --config nodemon.json",
+        "server": "cross-env NODE_ENV=development nodemon --config nodemon.json",
         "preserver:prod": "npm run build:webpack",
-        "server:prod": "nodemon --config nodemon.prod.json",
+        "server:prod": "cross-env NODE_ENV=production nodemon --config nodemon.json",
         "build:webpack": "rm -rf dist && npm run build:client && npm run build:server",
         "build:client": "webpack --env prod --config build/webpack.client.js --progress --profile --json > stats.client.json",
         "build:server": "webpack --env prod --config build/webpack.server.js --progress --profile --json > stats.server.json"
