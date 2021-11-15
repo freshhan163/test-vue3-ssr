@@ -45,23 +45,18 @@ export default {
             user
         };
     },
-    serverPrefetch() {
-        const { id } = this.$route.params;
-        return this.$store.dispatch("FETCH_USER", { id });
+    serverPrefetch(ctx) {
+        if (!cxt) {
+            return;
+        }
+        const {store, route} = cxt;
+        if (!route.params) {
+            return;
+        }
+        const { id } = route.params;
+        return store.dispatch("FETCH_USER", { id });
     }
 };
-
-// store.dispatch("FETCH_USER", { id: route.params.id });
-
-// export const user = computed(() => store.state.users[route.params.id])
-
-// export default {
-//   serverPrefetch() {
-//     const { id } = this.$route.params
-
-//     return this.$store.dispatch('FETCH_USER', { id })
-//   },
-// }
 </script>
 
 <style lang="scss">

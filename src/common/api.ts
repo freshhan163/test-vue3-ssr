@@ -5,12 +5,35 @@
 import {
     useStore
 } from 'vuex';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 const isArray = Array.isArray;
 const $axios = axios.create({
     baseURL: 'https://api.hackerwebapp.com'
 });
+
+const responseHandler =  ((response: AxiosResponse<Response>) => {
+    return new Promise((resolve, reject) => {
+        if (response) {
+            resolve(response);
+        } else {
+            reject(response);
+        }
+    }).then(null, err => {
+        throw new Error(err);
+    });
+});
+
+const responseErrorHandler = ((error: any) => {
+    return new Promise((resolve, reject) => {
+        reject({
+            status: error.response ? error.response.status : error.code,
+            error_detail: error.stack || ''
+        });
+    });
+});
+
+$axios.interceptors.response.use(responseHandler, responseErrorHandler);
 
 export const validFeeds = {
     news: {
@@ -56,8 +79,8 @@ export const api = {
         commit(optimistic)
         const {
             data
-        } = await $axios.get(`/item/${ id }`)
-        commit(data)
+        } = await $axios.get(`/item/${ id }`);
+        commit(Object.assign({}, optimistic, data, {loading: false}));
     }
 }
 

@@ -7,7 +7,7 @@ export default async function(ssrContext) {
     await router.isReady();
 
     if (router.currentRoute.value.matched.length === 0) {
-        ssrContext.throw(404, 'Not Found');
+        throw new Error('404');
     }
 
     const matchedComponents = router.currentRoute.value.matched.flatMap(record => Object.values(record.components));
@@ -17,7 +17,7 @@ export default async function(ssrContext) {
                 return component.serverPrefetch({
                     store, 
                     route: router.currentRoute.value
-                })
+                });
             }
         }))
     } catch(error) {

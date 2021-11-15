@@ -59,10 +59,16 @@ export default {
     }
   },
 
-  serverPrefetch() {
-    let feed = this.feed
-    let page = this.page
-
+  serverPrefetch(ctx) {
+    if (!ctx) {
+      return;
+    }
+    const {store, route} = cxt;
+    if (!route.params) {
+        return;
+    }
+    let feed = this.feed;
+    let page = this.page;
     return this.$store.dispatch('FETCH_FEED', { feed, page })
   },
 }
