@@ -4,48 +4,35 @@
             <router-link to="/" class="logo" exact>
                 <span>首页</span>
             </router-link>
-            <router-link
-                v-for="(list, key) in feeds"
-                :key="key"
-                :to="{ name: 'feed-page', params: { feed: key } }"
-            >
-                {{ list.title }}
-            </router-link>
             <a
                 class="github"
                 href="https://github.com/vuejs/vue-next"
                 target="_blank"
                 rel="noopener banner"
             >
-                vue-next库源码11
+                vue-next库源码
             </a>
         </nav>
     </header>
     <router-view v-slot="{ Component, route }">
         <transition name="fade" mode="out-in">
-            <component :is="Component" :key="route.params.feed" />
+            <component :is="Component" :key="route.params.feed" :test="1" />
         </transition>
     </router-view>
 </template>
 
-<script>
-import { validFeeds } from "@/common/api";
+<script lang="ts">
 
 export default {
-    name: "App",
+    name: 'app',
     setup() {
-        return {
-            feeds: validFeeds
-        };
-    },
+        return {};
+    }
 };
 </script>
 
 <style lang="scss">
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
     font-size: 15px;
     background-color: #f2f3f5;
     margin: 0;
@@ -71,18 +58,18 @@ a {
     .inner {
         max-width: 800px;
         box-sizing: border-box;
-        margin: 0px auto;
+        margin: 0 auto;
         padding: 15px 5px;
     }
 
     a {
         color: #fff;
         line-height: 24px;
-        transition: color 0.15s ease;
+        transition: color .15s ease;
         display: inline-block;
         vertical-align: middle;
         font-weight: 300;
-        letter-spacing: 0.075em;
+        letter-spacing: .075em;
         margin-right: 1.8em;
 
         &:hover {
@@ -93,15 +80,11 @@ a {
             color: #fff;
             font-weight: 600;
         }
-
-        &:nth-child(6) {
-            margin-right: 0;
-        }
     }
 
     .github {
         color: #fff;
-        font-size: 0.9em;
+        font-size: .9em;
         margin: 0;
         float: right;
     }
@@ -131,15 +114,9 @@ a {
     }
 }
 
-.view {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-}
-
 .fade-enter-active,
 .fade-leave-active {
-    transition: all 0.2s ease;
+    transition: all .2s ease;
 }
 
 .fade-enter,

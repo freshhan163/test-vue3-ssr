@@ -8,18 +8,38 @@
 </template>
 
 <script>
+import { computed, onMounted, watch, toRefs } from 'vue'
 import ItemListNav from '@/components/ItemListNav.vue';
 import ItemList from '@/components/ItemList.vue';
 
 export default {
   inheritAttrs: false,
   components: { ItemListNav, ItemList },
+  serverPrefetch(ctx) {
+    
+    if (!ctx) {
+      return;
+    }
+    const {store, route} = ctx;
+    if (!route.params) {
+        return;
+    }
+    let { feed = 'news', page = 1} = route.params;
+    page = Number(route.params.page) || 1;
+    
+    const pages = page > 1 ? [page, page + 1, page - 1] : [page, page + 1];
+    const promisis = pages.map((page) => {
+      return store.dispatch('FETCH_FEED', { feed: feed, page: page });
+    });
+    return Promise.all(promisis);
+  }
 };
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 .news-list {
-  background-color: #fff;
+  background:green;
   border-radius: 2px;
 }
 

@@ -49,6 +49,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 .news-item {
   background-color: #fff;
   padding: 20px 30px 20px 80px;

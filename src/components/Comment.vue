@@ -55,6 +55,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 .comment-children {
   .comment-children {
     margin-left: 1.5em;
@@ -110,4 +111,5 @@ export default {
     }
   }
 }
+/* eslint-enable */
 </style>

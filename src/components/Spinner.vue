@@ -34,6 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 $offset: 126;
 $duration: 1.4s;
 
@@ -67,7 +68,7 @@ $duration: 1.4s;
 
 .spinner .path {
   stroke: #ff6600;
-  stroke-dasharray: $offset;
+  stroke-dasharray:$offset ;
   stroke-dashoffset: 0;
   transform-origin: center;
   animation: dash $duration ease-in-out infinite;
@@ -75,16 +76,16 @@ $duration: 1.4s;
 
 @keyframes dash {
   0% {
-    stroke-dashoffset: $offset;
+    stroke-dashoffset:$offset ;
   }
 
   50% {
-    stroke-dashoffset: ($offset / 2);
+    stroke-dashoffset: 63;
     transform: rotate(135deg);
   }
 
   100% {
-    stroke-dashoffset: $offset;
+    stroke-dashoffset:$offset ;
     transform: rotate(450deg);
   }
 }

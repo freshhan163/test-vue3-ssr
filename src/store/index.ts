@@ -2,8 +2,7 @@ import {
     createStore
 } from 'vuex';
 import {
-    api,
-    validFeeds
+    api
 } from '@/common/api';
 
 const state = () => {
@@ -16,13 +15,13 @@ const state = () => {
         },
         feeds: {
             /* [page: number] : [ [id: number] ] */
-        },
-    }
-    for (let feed in validFeeds) {
-        s.feeds[feed] = {}
-    }
+            news: {
+                2: []
+            }
+        }
+    };
     return s;
-}
+};
 
 const mutations = {
     SET_FEED: (state, {
@@ -42,7 +41,10 @@ const mutations = {
     SET_ITEMS: (state, {
         items
     }) => {
-        items.forEach((item) => (state.items[item.id] = item))
+        items.forEach(item => {
+            state.items[item.id] = item;
+            return;
+        });
     },
     SET_USER: (state, {
         id,
@@ -74,7 +76,7 @@ const actions = {
                     items
                 })
             },
-            (state.feeds[feed][page] || []).map((id) => state.items[id])
+            (state.feeds[feed][page] || []).map(id => state.items[id])
         )
     },
 
@@ -86,7 +88,7 @@ const actions = {
     }) {
         await api.getItem(
             id,
-            (item) => commit('SET_ITEM', {
+            item => commit('SET_ITEM', {
                 item
             }),
             Object.assign({
@@ -105,7 +107,7 @@ const actions = {
     }) {
         await api.getUser(
             id,
-            (user) => commit('SET_USER', {
+            user => commit('SET_USER', {
                 id,
                 user
             }),
@@ -114,13 +116,13 @@ const actions = {
                 loading: true
             }, state.users[id])
         )
-    },
+    }
 }
 
 const getters = {
-    getItems: (state) => (feed, page) => {
+    getItems: state => (feed, page) => {
         return (state.feeds[feed][page] || []).map((id) => state.items[id])
-    },
+    }
 }
 
 // 实现store热更新
@@ -131,14 +133,14 @@ const store = createStore({
     getters
 });
 
-if ((module as any).hot) {
-    (module as any).hot.accept([actions, mutations], () => {
-        (store as any).hotUpdate({
-            actions,
-            mutations,
-        })
-    })
-}
+// if ((module as any).hot) {
+//     (module as any).hot.accept([actions, mutations], () => {
+//         (store as any).hotUpdate({
+//             actions,
+//             mutations,
+//         })
+//     })
+// }
 
 export function _createStore() {
     return createStore({
@@ -147,4 +149,4 @@ export function _createStore() {
         actions,
         getters
     });
-};
+}

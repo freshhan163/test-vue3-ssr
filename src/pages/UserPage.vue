@@ -46,10 +46,10 @@ export default {
         };
     },
     serverPrefetch(ctx) {
-        if (!cxt) {
+        if (!ctx) {
             return;
         }
-        const {store, route} = cxt;
+        const {store, route} = ctx;
         if (!route.params) {
             return;
         }
@@ -60,6 +60,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 .user-view {
     background-color: #fff;
     box-sizing: border-box;

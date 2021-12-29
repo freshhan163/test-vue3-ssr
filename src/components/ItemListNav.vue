@@ -43,6 +43,7 @@ export default {
 
 
 <style lang="scss">
+/* eslint-disable */
 .news-list-nav, .news-list {
   background-color: #fff;
   border-radius: 2px;

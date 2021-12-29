@@ -1,0 +1,172 @@
+module.exports = {
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
+    "extends": [
+        "plugin:vue/vue3-essential",
+        "plugin:vue/vue3-recommended",
+        "prettier",
+        "@vue/typescript"
+    ],
+    "plugins": [
+        "prettier",
+        "promise",
+        "vue",
+        "@typescript-eslint"
+    ],
+    "env": {
+        "browser": true
+    },
+    "root": true,
+    "rules": {
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "semi": [1],
+        "max-len": [
+            1,
+            {
+                "code": 200
+            }
+        ],
+        "vue/no-parsing-error": [
+            0
+        ],
+        "max-params": [
+            2,
+            10
+        ],
+        "dot-notation": 1,
+        "no-nested-ternary": [
+            1
+        ], // 尽量不用嵌套的三元表达式
+        "vue/valid-v-if": [
+            1
+        ],
+        "vue/html-self-closing": [
+            0
+        ],
+        "no-self-compare": 1,
+        "vue/attribute-hyphenation": [
+            2,
+            "always",
+            {
+                "ignore": [
+                    "custom-prop"
+                ]
+            }
+        ],
+        "vue/mustache-interpolation-spacing": [
+            2,
+            "always"
+        ], // template {{ data }}空格
+        "vue/space-infix-ops": [
+            "error",
+            {
+                "int32Hint": false
+            }
+        ], // template 操作符空格
+        "vue/object-curly-spacing": [
+            "error",
+            "always"
+        ], // template 对象{} 两侧空格
+        "vue/no-v-html": [
+            0
+        ],
+        "vue/eqeqeq": "error", // template 全等
+        "vue/require-prop-types": "off",
+        "vue/require-default-prop": "off",
+        "vue/script-setup-uses-vars": "error",
+        "vue/no-multiple-template-root": "off",
+        "vue/valid-v-model": "off",
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ], // 对象{} 两侧空格
+        "space-infix-ops": [
+            "error",
+            {
+                "int32Hint": false
+            }
+        ], // 操作符空格 a + b
+        "comma-spacing": [
+            "error",
+            {
+                "before": false,
+                "after": true
+            }
+        ], // 逗号后空格
+        "arrow-spacing": [
+            "error",
+            {
+                "before": true,
+                "after": true
+            }
+        ], // 箭头函数两侧空格
+        "key-spacing": [
+            "error",
+            {
+                "beforeColon": false,
+                "afterColon": true
+            }
+        ], // key value中间的空格
+        // 注释后空格
+        "spaced-comment": [
+            "error",
+            "always",
+            {
+                "block": {
+                    "exceptions": [
+                        "*"
+                    ],
+                    "balanced": true
+                }
+            }
+        ],
+        // 末尾逗号
+        "comma-dangle": [
+            "error",
+            {
+                "arrays": "never",
+                "objects": "never",
+                "imports": "never",
+                "exports": "never",
+                "functions": "never"
+            }
+        ],
+        // "@typescript-eslint/no-unused-vars": "error",   // fix类型引用还提示never used
+        "no-unused-vars": [1],
+        "no-use-before-define": "off",
+        "no-undefined": "off",
+        "no-console": "off",
+        "consistent-return": "off",
+        "@typescript-eslint/type-annotation-spacing": [
+            "error",
+            {
+                "before": false,
+                "after": true
+            }
+        ], // 类型前空格 test: Test = {};
+        // 类型 大驼峰
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "typeLike",
+                "format": [
+                    "PascalCase"
+                ]
+            }
+        ]
+    },
+    "globals": {
+        "_i18n": true,
+        "defineProps": "readonly", //  setup SFC 全局变量配置
+        "defineEmits": "readonly",
+        "defineExpose": "readonly",
+        "withDefaults": "readonly"
+    }
+};

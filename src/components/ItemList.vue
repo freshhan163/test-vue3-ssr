@@ -52,29 +52,17 @@ export default {
       pages.forEach((page) =>
         store.dispatch('FETCH_FEED', { feed: feed.value, page: page })
       )
-    })
+    });
 
     return {
       items: computed(() => store.getters.getItems(feed.value, page.value)),
     }
-  },
-
-  serverPrefetch(ctx) {
-    if (!ctx) {
-      return;
-    }
-    const {store, route} = cxt;
-    if (!route.params) {
-        return;
-    }
-    let feed = this.feed;
-    let page = this.page;
-    return this.$store.dispatch('FETCH_FEED', { feed, page })
-  },
+  }
 }
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 .news-list {
   transition: all .5s cubic-bezier(0.55, 0, 0.1, 1)
 }
@@ -112,4 +100,5 @@ export default {
     margin: 10px 0;
   }
 }
+/* eslint-enable */
 </style>

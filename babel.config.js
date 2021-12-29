@@ -1,4 +1,4 @@
-module.exports = (api) => ({
+module.exports = {
     presets: [
         [
             '@babel/preset-env',
@@ -8,10 +8,15 @@ module.exports = (api) => ({
                     version: 3,
                     proposals: true
                 },
-                debug: false,
+                debug: false
             },
             "@babel/preset-typescript"
-        ],
+        ]
     ],
-    plugins: api.env() === 'prod' ? [] : [],
-});
+    plugins: [
+        "@babel/plugin-transform-runtime",
+        "@babel/plugin-syntax-jsx",
+        "transform-vue-jsx",
+        "lodash"
+    ]
+};

@@ -58,12 +58,12 @@ export default {
             isAbsolute,
         };
     },
-    serverPrefetch(cxt) {
+    serverPrefetch(ctx) {
         // serverPrefetch在页面初始化时，会运行两次，有一次cxt为undefined，待定义是什么时候调用的
-        if (!cxt) {
+        if (!ctx) {
             return;
         }
-        const {store, route} = cxt;
+        const {store, route} = ctx;
         if (!route.params) {
             return;
         }
@@ -74,6 +74,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* eslint-disable */
 .item-view-header {
     background-color: #fff;
     padding: 1.8em 2em 1em;

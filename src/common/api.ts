@@ -12,7 +12,7 @@ const $axios = axios.create({
     baseURL: 'https://api.hackerwebapp.com'
 });
 
-const responseHandler =  ((response: AxiosResponse<Response>) => {
+const responseHandler = ((response: AxiosResponse<Response>) => {
     return new Promise((resolve, reject) => {
         if (response) {
             resolve(response);
@@ -30,33 +30,15 @@ const responseErrorHandler = ((error: any) => {
             status: error.response ? error.response.status : error.code,
             error_detail: error.stack || ''
         });
+    }).catch(err => {
+        return {
+            status: err.status || 500,
+            data: null
+        };
     });
 });
 
 $axios.interceptors.response.use(responseHandler, responseErrorHandler);
-
-export const validFeeds = {
-    news: {
-        title: '新闻',
-        pages: 10
-    },
-    newest: {
-        title: '最新文章',
-        pages: 12
-    },
-    ask: {
-        title: '问题',
-        pages: 2
-    },
-    show: {
-        title: '展示',
-        pages: 2
-    },
-    jobs: {
-        title: '招聘',
-        pages: 1
-    },
-}
 
 export const api = {
     async getFeeds(feed, page, commit, optimistic) {
@@ -71,7 +53,7 @@ export const api = {
         commit(optimistic)
         const {
             data
-        } = await $axios.get(`/user/${id}`)
+        } = await $axios.get(`/user/${id}`);
         commit(data)
     },
 
@@ -104,8 +86,6 @@ export function fetchItems(feed, page, isServer = false) {
             pages = p > 1 ? [p, p + 1, p - 1] : [p, p + 1]
         }
     }
-    console.log(pages)
-    console.log(feed)
     pages.forEach((p) => store.dispatch('FETCH_FEED', {
         f,
         p

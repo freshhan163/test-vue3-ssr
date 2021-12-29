@@ -10,7 +10,8 @@
     "verbose": true,
     "exec": "ts-node --project server/tsconfig.json --files server/app.ts",
     "env": {
-        "PORT": "3001"
+        "PORT": 8081,
+        "DEFAULT_PROXY_SERVER": "http://localhost:3500"
     },
     "ext": "ts,js"
 }
