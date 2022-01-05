@@ -52,41 +52,41 @@ class VueSSRClientPlugin {
 						initial: initialFiles,
 						async: asyncFiles,
 						modules: {
-							/* [identifier: string]: Array<index: number> */
+						/* [identifier: string]: Array<index: number> */
 						}
 					};
 					const assetModules = stats.modules.filter((m) => m.assets.length);
 					const fileToIndex = (file) => manifest.all.indexOf(file);
 
 					stats.modules.forEach((m) => {
-						if (m.chunks.length === 1) {
-							const cid = m.chunks[0];
-							const chunk = stats.chunks.find((c) => c.id === cid);
+					if (m.chunks.length === 1) {
+						const cid = m.chunks[0];
+						const chunk = stats.chunks.find((c) => c.id === cid);
 
-							if (!chunk || !chunk.files) {
-								return;
-							}
-							const id = m.identifier.replace(/\|.*/, '').split('!').pop(); /* use only 'base' filepath */
-							const files = (manifest.modules[hash(id)] = chunk.files.map(
-								fileToIndex
-							));
-
-							assetModules.forEach((m) => {
-								if (m.chunks.some((id) => id === cid)) {
-									/* eslint-disable */
-									files.push.apply(files, m.assets.map(fileToIndex));
-								}
-							});
+						if (!chunk || !chunk.files) {
+						return;
 						}
+						const id = m.identifier.replace(/\|.*/, '').split('!').pop(); /* use only 'base' filepath */
+						const files = (manifest.modules[hash(id)] = chunk.files.map(
+						fileToIndex
+						));
+
+						assetModules.forEach((m) => {
+						if (m.chunks.some((id) => id === cid)) {
+							/* eslint-disable */
+							files.push.apply(files, m.assets.map(fileToIndex));
+						}
+						});
+					}
 					});
 					const json = JSON.stringify(manifest, null, 2);
 					compilation.assets[this$1.options.filename] = {
-						source: function() {
-							return json;
-						},
-						size: function() {
-							return json.length;
-						}
+					source: function() {
+						return json;
+					},
+					size: function() {
+						return json.length;
+					}
 					};
 				}
 			);

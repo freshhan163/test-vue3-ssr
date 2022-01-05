@@ -109,7 +109,7 @@ export declare function createBundle(_bundle: Partial<Bundle> | string, options?
 };
 ```
 
-由于```webpack.server.ts```采用的是```webpack-manifest-plugin```，打包后的```vue-ssr-server-manifest.json```文件内容和```createBundle(bundle, options)```bundle参数不一致，因此为了满足```createBundle(bundle, options)```API参数的要求，这里将bundle内容读取出来，作为string传入
+由于```webpack.server.ts```采用的是```webpack-manifest-plugin```，打包后的```vue-ssr-server-manifest.json```文件内容和```createBundle(bundle, options)```bundle参数不一致，
 
 ```vue-ssr-server-manifest.json```文件内容
 
@@ -122,6 +122,8 @@ export declare function createBundle(_bundle: Partial<Bundle> | string, options?
 }
 ```
 
+因此为了满足```createBundle(bundle, options)```API参数的要求，这里将bundle内容读取出来，作为string传入。
+
 ```js
 // 从内存读取文件夹
 serverBundle = JSON.parse(readOutputFile(msf, VUE_SSR_SERVER_MANIFEST));
@@ -130,9 +132,9 @@ serverBundle = JSON.parse(readOutputFile(msf, VUE_SSR_SERVER_MANIFEST));
 serverBundle = readOutputFile(msf, SERVER_BUNDLE_JS);
 ```
 
-当然也可以自己手写库，将返回的参数改造为符合```createBunlde(bunlde, options)```的格式。
+当然也可以自己手写库，比如```client.plugin.ts```，将返回的参数改造为符合```createBunlde(bunlde, options)```的格式。
 
-4.server/app.ts
+4.server/app.ts提供的功能
 * node版本检查功能
 
 * log日志功能：采用```log4js```库

@@ -1,0 +1,13 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        "src",
+        "node_modules",
+        "build/*",
+        "log/*"
+    ],
+    "watch": ["server/**/*"],
+    "verbose": true,
+    "exec": "ts-node --project server/tsconfig.json --files server/index.ts",
+    "ext": "ts,js"
+}
