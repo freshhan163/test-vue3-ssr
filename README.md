@@ -31,16 +31,52 @@ npm i
 npm run prepare # 安装husky钩子
 ```
 
-## 启动
+## 开发环境启动
 ```bash
 npm run start # 启动development环境（有热更新）
+```
 
-npm run server # 启动开发环境server
+## 生产环境启动
+
+```bash
+npm run build:all # 打包客户端和服务端
 
 npm run server:prod # 启动生产环境server
-
-npm run server:build # 先打包，然后启动生产环境server
 ```
+
+## 本项目目录解析
+```bash
+├── README.md
+├── babel.config.js
+├── build // 打包相关
+│   ├── lib // 代码用到的库
+│   ├── setup-dev-server.ts // dev下，webpack + HMR配置
+│   ├── webpack.base.ts
+│   ├── webpack.client.ts // 客户端打包配置
+│   └── webpack.server.ts // 服务端打包配置
+├── config // 常量
+├── example // demo
+│   ├── node-ssr-base // 基础的node服务端渲染demo
+│   ├── vue3-ssr-base // vue官网的服务端渲染demo
+│   └── vue3-ssr-webpack // vue3 + webpack 服务端渲染demo
+├── nodemon.json // nodemon环境
+├── package.json
+├── postcss.config.js
+├── prettier.config.js
+├── public
+├── server // 服务端代码
+│   ├── app.ts // 入口文件
+│   ├── config // 常量
+│   ├── lib // log日志库
+│   ├── middleware // 中间件
+│   ├── tsconfig.json
+│   └── types
+├── src // 客户端代码
+├── tsconfig-for-webpack.json // webpack的ts配置
+├── tsconfig.json
+└── types
+```
+其中example/vue3-ssr-webpack 是本项目src/ + server/的简化版，只实现了ssr功能。但src/ + server/下，还添加了log\、node版本检查、webpack打包等常量提取功能。
 
 ## ssr相关内容解析
 
@@ -145,19 +181,6 @@ serverBundle = readOutputFile(msf, SERVER_BUNDLE_JS);
 
 * dev环境下ssr功能
 
-* prod环境下dev功能
+* prod环境下ssr功能
 
 * 服务端和客户端渲染服务：判断客户端、还是服务端，且提供404/error的客户端渲染
-
-5.dev环境下ssr功能——server/middleware/ssr-render-dev.ts
-
-* 本项目使用的是0.3.2版本，需要添加```renderToString```、```bundleRunner```参数，否则会报错。
-* ```rendererToString```返回的内容也有变化：返回的page包含html、renderResourceHints、renderStyles、renderScripts参数。
-
-6.prod环境下dev功能
-
-```test-vue3-ssr```项目使用的是```createBundleRenderer```API。
-
-但[官方文档](https://v3.cn.vuejs.org/guide/ssr/server.html)中推荐的是直接从打包后的文件中获取```createApp```函数。不确定的是该API对分包的支持程度。
-
-7.服务端和客户端渲染服务
