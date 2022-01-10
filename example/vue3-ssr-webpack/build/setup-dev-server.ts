@@ -42,8 +42,8 @@ export default function setupDevServer(app, cb) {
 
     // 修改clientConfig
     clientConfig.entry.app = [
-        clientConfig.entry.app,
-        'webpack-hot-middleware/client?path=/__webpack_hmr&reload=true' // bundle重新构建时接收到通知，然后更新客户端的bundle
+        'webpack-hot-middleware/client?path=/__webpack_hmr&reload=true', // bundle重新构建时接收到通知，然后更新客户端的bundle
+        clientConfig.entry.app
     ];
 
     // 添加HotMiddleware

@@ -9,6 +9,7 @@ import { createBundleRenderer } from 'vue-bundle-renderer';
 import serialize from 'serialize-javascript';
 import { VUE_SSR_CLIENT_MANIFEST, VUE_SSR_SERVER_MANIFEST, CLIENT_HTML, webpackConfig } from '../../config/const';
 import { Context } from 'koa';
+import { renderHtml } from './lib/renderTemplate';
 
 // 客户端和服务端状态同步
 function renderState(context) {
@@ -89,24 +90,14 @@ export default function ssrProd() {
                 });
             }
     
-            const fileHtml = `
-                <!DOCTYPE html>
-                    <html lang="en">
-                        <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        ${renderResourceHints()}
-                        ${renderStyles()}
-                        ${renderInitialChunkCss}
-                        <title>SSR Vue 3本地环境</title>
-                        </head>
-                        <body>
-                        <div id="app">${html}</div>
-                        ${renderScripts()}
-                        ${renderState(requestContent)}
-                        </body>
-                    </html>
-                `;
+            const fileHtml = renderHtml({
+                META_ATTRS: '',
+                TITLE_NAME: '服务端渲染',
+                HEAD_RESOURCE_ATTRS: `${renderResourceHints()} \n ${renderStyles()} \n ${renderInitialChunkCss}`,
+                APP_ATTRS: html,
+                BODY_RESOURCE_ATTRS: renderScripts(),
+                STATE_ATTRS: renderState(requestContent)
+            });
             return fileHtml;
         };
 

@@ -8,6 +8,7 @@ import serialize from 'serialize-javascript';
 import setupDevServer from '../../build/setup-dev-server';
 import { Context } from 'koa';
 import { webpackConfig } from '../../config/const';
+import { renderHtml } from './lib/renderTemplate';
 
 const startupStatus = {
     hmtIsConnected: false,
@@ -85,7 +86,9 @@ export default function ssrDev(app) {
             let renderInitialChunkCss = '';
             if (requestContent.initialChunkName.length > 0) {
                 requestContent.initialChunkName.forEach(chunkName => {
-                    renderInitialChunkCss += `<link rel="stylesheet" href="/css/${chunkName}.chunk.css">\n`;
+                    if (startupStatus.clientManifest.async.includes(`css/${chunkName}.chunk.css`)) {
+                        renderInitialChunkCss += `<link rel="stylesheet" href="/css/${chunkName}.chunk.css">\n`;
+                    }
                 });
             } else {
                 // 兜底策略：当前路径下 没有异步chunk的时候，将所有的css全部preload进去
@@ -96,24 +99,15 @@ export default function ssrDev(app) {
                 });
             }
 
-            const fileHtml = `
-                <!DOCTYPE html>
-                    <html lang="en">
-                        <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        ${renderResourceHints()}
-                        ${renderStyles()}
-                        ${renderInitialChunkCss}
-                        <title>SSR Vue 3本地环境</title>
-                        </head>
-                        <body>
-                        <div id="app">${html}</div>
-                        ${renderScripts()}
-                        ${renderState(requestContent)}
-                        </body>
-                    </html>
-                `;
+            const fileHtml = renderHtml({
+                META_ATTRS: '',
+                TITLE_NAME: '服务端渲染',
+                HEAD_RESOURCE_ATTRS: `${renderResourceHints()} \n ${renderStyles()} \n ${renderInitialChunkCss}`,
+                APP_ATTRS: html,
+                BODY_RESOURCE_ATTRS: renderScripts(),
+                STATE_ATTRS: renderState(requestContent)
+            });
+
             return fileHtml;
         };
 
